@@ -8,6 +8,12 @@
   <artifactId>messaging-interface-xmpp</artifactId>
   <packaging>jar</packaging>
   <name>XMPP messaging implementation</name>
+  
   <dependencies>
+    <dependency>
+      <groupId>nl.jorncruijsen.messaging</groupId>
+      <artifactId>messaging-core</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 </project>

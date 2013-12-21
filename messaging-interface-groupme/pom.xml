@@ -8,6 +8,12 @@
   <artifactId>messaging-interface-groupme</artifactId>
   <packaging>jar</packaging>
   <name>GroupMe messaging implementation</name>
+  
   <dependencies>
+    <dependency>
+      <groupId>nl.jorncruijsen.messaging</groupId>
+      <artifactId>messaging-core</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 </project>

@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.jorncruijsen.messaging</groupId>
-  <artifactId>command-messaging-parent</artifactId>
+  <artifactId>java-messaging-parent</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Messaging shell parent</name>
@@ -28,11 +28,13 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-        <module>cmd-handler-logging</module>
-        <module>cmd-handler-shell</module>
-        <module>cmd-interface-xmpp</module>
-        <module>cmd-relay-connector</module>
-        <module>cmd-relay-core</module>
+        <module>messaging-core</module>
+        <module>messaging-handler</module>
+        <module>messaging-handler-logging</module>
+        <module>messaging-handler-shell</module>
+        <module>messaging-interface</module>
+        <module>messaging-interface-xmpp</module>
+        <module>messaging-interface-groupme</module>
       </modules>
     </profile>
   </profiles>
