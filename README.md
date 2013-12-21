@@ -1,4 +1,4 @@
 java-messaging
 ==============
 
-Messaging interface and implementation for various messaging protocols
+Messaging (chat) interface and implementation for various messaging protocols
