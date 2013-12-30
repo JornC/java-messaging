@@ -1,151 +1,78 @@
 package nl.jorncruijsen.messaging;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Map;
 
+import nl.jorncruijsen.messaging.listeners.MessageListener;
 import nl.jorncruijsen.messaging.providers.ChannelManager;
 import nl.jorncruijsen.messaging.providers.MessageChannel;
+import nl.jorncruijsen.messaging.providers.MessageService;
+
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.RosterEntry;
 
 public class XMPPChannelManager implements ChannelManager {
+  private final Map<MessageChannel, ArrayList<MessageListener>> channels = new HashMap<>();
 
-  @Override
-  public int size() {
-    // TODO Auto-generated method stub
-    return 0;
+  private MessageService service;
+
+  public void addChannel(final RosterEntry entry) {
+    final XMPPMessageChannel channel = new XMPPMessageChannel(service, entry);
+    addIfNotExists(channel);
   }
 
-  @Override
-  public boolean isEmpty() {
-    // TODO Auto-generated method stub
-    return false;
+  private void addIfNotExists(final XMPPMessageChannel channel) {
+    if (!channels.containsKey(channel)) {
+      channels.put(channel, new ArrayList<MessageListener>());
+    }
   }
 
-  @Override
-  public boolean contains(Object o) {
-    // TODO Auto-generated method stub
-    return false;
+  public void addMessageListener(final MessageChannel messageChannel, final nl.jorncruijsen.messaging.listeners.MessageListener listener) {
+    if ((messageChannel instanceof XMPPMessageChannel)) {
+      final XMPPMessageChannel xmppChannel = (XMPPMessageChannel) messageChannel;
+      addIfNotExists(xmppChannel);
+
+      channels.get(xmppChannel).add(listener);
+    }
+  }
+
+  public MessageChannel findChannel(final Chat chat) {
+    final String email = chat.getParticipant().split("/", 2)[0];
+
+    for (final MessageChannel channel : channels.keySet()) {
+      if ((channel instanceof XMPPMessageChannel)) {
+        final XMPPMessageChannel xmppChannel = (XMPPMessageChannel) channel;
+        if (email.equals(xmppChannel.getEmail())) {
+          return channel;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  public Iterable<MessageListener> getListeners(final MessageChannel channel) {
+    return channels.get(channel);
   }
 
   @Override
   public Iterator<MessageChannel> iterator() {
-    // TODO Auto-generated method stub
-    return null;
+    return channels.keySet().iterator();
   }
 
-  @Override
-  public Object[] toArray() {
-    // TODO Auto-generated method stub
-    return null;
+  public void removeMessageListener(final MessageChannel messageChannel, final nl.jorncruijsen.messaging.listeners.MessageListener listener) {
+    if (channels.containsKey(messageChannel)) {
+      final ArrayList<MessageListener> arrayList = channels.get(messageChannel);
+
+      while (arrayList.contains(listener)) {
+        arrayList.remove(listener);
+      }
+    }
   }
 
-  @Override
-  public <T> T[] toArray(T[] a) {
-    // TODO Auto-generated method stub
-    return null;
+  public void setMessageService(final MessageService service) {
+    this.service = service;
   }
-
-  @Override
-  public boolean add(MessageChannel e) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean remove(Object o) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean containsAll(Collection<?> c) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean addAll(Collection<? extends MessageChannel> c) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean addAll(int index, Collection<? extends MessageChannel> c) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean removeAll(Collection<?> c) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean retainAll(Collection<?> c) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public void clear() {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public MessageChannel get(int index) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public MessageChannel set(int index, MessageChannel element) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public void add(int index, MessageChannel element) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public MessageChannel remove(int index) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public int indexOf(Object o) {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public int lastIndexOf(Object o) {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public ListIterator<MessageChannel> listIterator() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public ListIterator<MessageChannel> listIterator(int index) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public List<MessageChannel> subList(int fromIndex, int toIndex) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
 }
