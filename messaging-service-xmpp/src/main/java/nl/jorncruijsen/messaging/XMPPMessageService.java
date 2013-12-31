@@ -62,7 +62,12 @@ public class XMPPMessageService extends AbstractMessageService<XMPPChannelManage
       final Iterable<nl.jorncruijsen.messaging.listeners.MessageListener> listeners = channelManager.getListeners(channel);
 
       for (final nl.jorncruijsen.messaging.listeners.MessageListener listener : listeners) {
-        listener.handleMessage(channel, javaMsg);
+        new Thread() {
+          @Override
+          public void run() {
+            listener.handleMessage(channel, javaMsg);
+          };
+        }.start();
       }
     }
 
