@@ -2,10 +2,10 @@ package nl.jorncruijsen.messaging.providers;
 
 import nl.jorncruijsen.messaging.listeners.MessageListener;
 
-public abstract class MessageChannelImpl implements MessageChannel {
+public abstract class AbstractMessageChannel implements MessageChannel {
   protected MessageService messageService;
 
-  public MessageChannelImpl(final MessageService messageService) {
+  public AbstractMessageChannel(final MessageService messageService) {
     this.messageService = messageService;
   }
 
@@ -21,6 +21,12 @@ public abstract class MessageChannelImpl implements MessageChannel {
 
   @Override
   public void sendMessage(final String message) {
+    System.out.println(String.format("--> %s: %s", getChannelId(), message));
+
     messageService.sendMessage(this, message);
+  }
+
+  public boolean equals(final AbstractMessageChannel other) {
+    return other.getChannelId().equals(getChannelId());
   }
 }

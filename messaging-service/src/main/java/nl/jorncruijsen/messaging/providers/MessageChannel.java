@@ -8,4 +8,6 @@ public interface MessageChannel {
   void removeMessageListener(MessageListener messageListener);
 
   void sendMessage(String message);
+
+  String getChannelId();
 }

@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import nl.jorncruijsen.messaging.listeners.MessageListener;
 import nl.jorncruijsen.messaging.providers.ChannelManager;
-import nl.jorncruijsen.messaging.providers.MessageChannel;
+import nl.jorncruijsen.messaging.providers.AbstractMessageChannel;
 import nl.jorncruijsen.messaging.providers.MessageService;
 
 /**
@@ -22,14 +22,14 @@ public class MultiPlexedMessageService implements MessageService {
   private final ArrayList<MessageService> services = new ArrayList<>();
 
   @Override
-  public void addMessageListener(final MessageListener listener, final MessageChannel messageChannel) {
+  public void addMessageListener(final MessageListener listener, final AbstractMessageChannel messageChannel) {
     messageChannel.addMessageListener(listener);
   }
 
   public void addMessagingService(final MessageService service) {
     services.add(service);
 
-    for (final MessageChannel channel : service.getChannelManager()) {
+    for (final AbstractMessageChannel channel : service.getChannelManager()) {
       channelManager.add(channel);
     }
   }
@@ -45,12 +45,12 @@ public class MultiPlexedMessageService implements MessageService {
   }
 
   @Override
-  public void removeMessageListener(final MessageListener listener, final MessageChannel messageChannel) {
+  public void removeMessageListener(final MessageListener listener, final AbstractMessageChannel messageChannel) {
     messageChannel.removeMessageListener(listener);
   }
 
   @Override
-  public void sendMessage(final MessageChannel channel, final String message) {
+  public void sendMessage(final AbstractMessageChannel channel, final String message) {
     for (final MessageService service : services) {
       service.sendMessage(channel, message);
     }

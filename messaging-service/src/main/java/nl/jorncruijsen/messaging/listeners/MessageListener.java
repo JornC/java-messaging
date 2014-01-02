@@ -1,8 +1,8 @@
 package nl.jorncruijsen.messaging.listeners;
 
 import nl.jorncruijsen.messaging.domain.Message;
-import nl.jorncruijsen.messaging.providers.MessageChannel;
+import nl.jorncruijsen.messaging.providers.AbstractMessageChannel;
 
 public interface MessageListener {
-  void handleMessage(MessageChannel channel, Message message);
+  void handleMessage(AbstractMessageChannel channel, Message message);
 }

@@ -7,5 +7,5 @@ public interface MessageService extends MessageProvider {
 
   void init(Properties properties);
 
-  void sendMessage(MessageChannel channel, String message);
+  void sendMessage(AbstractMessageChannel channel, String message);
 }
