@@ -21,8 +21,6 @@ public abstract class AbstractMessageChannel implements MessageChannel {
 
   @Override
   public void sendMessage(final String message) {
-    System.out.println(String.format("--> %s: %s", getChannelId(), message));
-
     messageService.sendMessage(this, message);
   }
 

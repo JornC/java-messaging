@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import nl.jorncruijsen.messaging.listeners.MessageListener;
-import nl.jorncruijsen.messaging.providers.ChannelManager;
 import nl.jorncruijsen.messaging.providers.AbstractMessageChannel;
+import nl.jorncruijsen.messaging.providers.ChannelManager;
 import nl.jorncruijsen.messaging.providers.MessageService;
 
 /**
@@ -51,6 +51,8 @@ public class MultiPlexedMessageService implements MessageService {
 
   @Override
   public void sendMessage(final AbstractMessageChannel channel, final String message) {
+    System.out.println(String.format("--> %s: %s", channel.getChannelId(), message));
+
     for (final MessageService service : services) {
       service.sendMessage(channel, message);
     }
