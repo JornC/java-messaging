@@ -14,19 +14,13 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.ServiceDiscoveryManager;
 
 public class XMPPBot implements MessageListener {
-  private final XMPPConnection connection;
-
-  private ChatManager manager;
+  private final ChatManager manager;
 
   private final XMPPChannelManager channelManager;
 
   public XMPPBot(final XMPPConnection connection, XMPPChannelManager channelManager) {
-    this.connection = connection;
     this.channelManager = channelManager;
-    init();
-  }
 
-  private void init() {
     /* Set that we are a bot client. */
     ServiceDiscoveryManager.setIdentityType("bot");
 

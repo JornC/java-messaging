@@ -30,9 +30,6 @@
       <modules>
         <module>messaging-core</module>
         <module>messaging-shared</module>
-        <module>messaging-handler</module>
-        <module>messaging-handler-logging</module>
-        <module>messaging-handler-shell</module>
         <module>messaging-service</module>
         <module>messaging-service-xmpp</module>
         <module>messaging-service-groupme</module>

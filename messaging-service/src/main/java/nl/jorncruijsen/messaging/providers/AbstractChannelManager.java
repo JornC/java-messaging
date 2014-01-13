@@ -17,6 +17,7 @@ public abstract class AbstractChannelManager<MC extends AbstractMessageChannel> 
 
   protected void addIfNotExists(final AbstractMessageChannel channel) {
     if (!channels.containsKey(channel)) {
+      System.out.println("New channel: " + channel.getChannelId());
       channels.put(channel, new ArrayList<MessageListener>());
     }
   }

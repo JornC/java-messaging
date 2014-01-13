@@ -37,12 +37,7 @@ public class XMPPMessageService extends AbstractMessageService<XMPPMessageChanne
       return;
     }
 
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        xmppBot = new XMPPBot(connection, channelManager);
-      }
-    }).run();
+    xmppBot = new XMPPBot(connection, channelManager);
   }
 
   @Override

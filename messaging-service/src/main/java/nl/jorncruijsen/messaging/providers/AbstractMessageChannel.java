@@ -27,4 +27,8 @@ public abstract class AbstractMessageChannel implements MessageChannel {
   public boolean equals(final AbstractMessageChannel other) {
     return other.getChannelId().equals(getChannelId());
   }
+
+  public void sendMessage(String string, Object... args) {
+    sendMessage(String.format(string, args));
+  }
 }

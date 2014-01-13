@@ -9,5 +9,7 @@ public interface MessageChannel {
 
   void sendMessage(String message);
 
+  void sendMessage(String message, Object ... args);
+
   String getChannelId();
 }

@@ -21,6 +21,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 public class GroupMeMessageService extends AbstractMessageService<GroupMeMessageChannel, GroupMeChannelManager> {
 
   private final GroupMeMessenger messenger;
+  private String botName;
 
   public GroupMeMessageService() {
     super(new GroupMeChannelManager());
@@ -33,11 +34,11 @@ public class GroupMeMessageService extends AbstractMessageService<GroupMeMessage
   public void init(final Properties properties) {
     String[] groups = properties.getProperty("groupme.groups").split(",");
     String[] keys = properties.getProperty("groupme.keys").split(",");
+    botName = properties.getProperty("groupme.botnames");
 
     assert groups.length == keys.length : "Group/key length not equal.";
 
     for (int i = 0; i < groups.length; i++) {
-      System.out.println(String.format("New group: %s - %s", groups[i], keys[i]));
       GroupMeMessageChannel channel = new GroupMeMessageChannel(this, groups[i], keys[i]);
       channelManager.addChannel(channel);
     }
@@ -53,22 +54,17 @@ public class GroupMeMessageService extends AbstractMessageService<GroupMeMessage
       }
     });
 
-    new Thread() {
-      @Override
-      public void run() {
-        try {
-          server.start();
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    }.start();
+    try {
+      server.start();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   private void handleContent(final ServletInputStream str) {
     final Message message = GroupMeParser.parseGroupMeMessage(str);
 
-    if (message == null || message.getSender().equals("Lampje")) {
+    if (message == null || message.getSender().equals(botName)) {
       return;
     }
 
