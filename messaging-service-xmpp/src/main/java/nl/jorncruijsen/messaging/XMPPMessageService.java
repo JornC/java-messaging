@@ -5,14 +5,8 @@ import java.util.Properties;
 import nl.jorncruijsen.messaging.providers.AbstractMessageChannel;
 import nl.jorncruijsen.messaging.providers.AbstractMessageService;
 
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Presence;
-
 public class XMPPMessageService extends AbstractMessageService<XMPPMessageChannel, XMPPChannelManager> {
-
-  private XMPPBot xmppBot;
+  private XMPPBotConnector xmppConnector;
 
   public XMPPMessageService() {
     super(new XMPPChannelManager());
@@ -21,27 +15,25 @@ public class XMPPMessageService extends AbstractMessageService<XMPPMessageChanne
 
   @Override
   public void init(final Properties properties) {
-    /* Check DB connection and crash if it fails, somehow. */
-    final ConnectionConfiguration connConfig = new ConnectionConfiguration("talk.google.com", 5222, "gmail.com");
-    final XMPPConnection connection = new XMPPConnection(connConfig);
+    Object lock = new Object();
 
-    try {
-      connection.connect();
-      connection.login(properties.getProperty("xmpp.user"), properties.getProperty("xmpp.pass"), "XMPP-Bot");
+    // Initialize the XMPP Connector
+    xmppConnector = new XMPPBotConnector(lock, properties, channelManager);
 
-      final Presence presence = new Presence(Presence.Type.available);
-      connection.sendPacket(presence);
-    } catch (final XMPPException ex) {
-      System.out.println("Failed to log in as " + connection.getUser());
-      ex.printStackTrace();
-      return;
+    // Lock the thread until the connector is done initialising
+    synchronized(lock) {
+      new Thread(xmppConnector).start();
+
+      try {
+        lock.wait();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
-
-    xmppBot = new XMPPBot(connection, channelManager);
   }
 
   @Override
   public void sendMessage(final AbstractMessageChannel channel, final String message) {
-    xmppBot.sendMessage(channel, message);
+    xmppConnector.sendMessage(channel, message);
   }
 }

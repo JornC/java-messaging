@@ -35,6 +35,10 @@ public abstract class AbstractChannelManager<MC extends AbstractMessageChannel> 
     return null;
   }
 
+  public void clear() {
+    channels.clear();
+  }
+
   public Iterable<MessageListener> getListeners(final AbstractMessageChannel channel) {
     return channels.get(channel);
   }
