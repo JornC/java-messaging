@@ -95,20 +95,16 @@ public class XMPPBotConnector implements Runnable {
       try {
         connection.connect();
       } catch (final XMPPException ex) {
-        System.out.println("Failed to connect to " + connection.getHost());
         ex.printStackTrace();
         continue;
       }
 
       try {
         connection.login(properties.getProperty("xmpp.user"), properties.getProperty("xmpp.pass"), "XMPP-Bot");
-        System.out.println("Logged in as " + connection.getUser());
-
         final Presence presence = new Presence(Presence.Type.available);
         connection.sendPacket(presence);
 
       } catch (final XMPPException ex) {
-        System.out.println("Failed to log in as " + connection.getUser());
         ex.printStackTrace();
         continue;
       }
